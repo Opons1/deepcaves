@@ -1,13 +1,16 @@
 deepcaves.stones = {}
 local function register_stone(texture, name, description, level, tier, max_digs)
+    --total stone types
     local variants
+    --calculate number needed to reigister
     if max_digs <= 6 then
            variants = max_digs
     else
         variants = 6
     end
-
+    --where the used overlays are stored
     local overlays = {}
+    --step between cracks, to calculate the ones used
     local crackstep = variants / 5
     for i = 0, variants do
         local crack = math.round(crackstep * i)
@@ -19,9 +22,7 @@ local function register_stone(texture, name, description, level, tier, max_digs)
     end
 
     local nodes = {}
-
-    local nodes = {}
-
+    --map variants to digs
     if variants <= 6 then
         for i = 1, variants - 1 do
             nodes[i] = "deepcaves:" .. name .. (i + 1)
