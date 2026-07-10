@@ -49,7 +49,7 @@ local function register_stone(texture, name, description, level, tier, max_digs)
         if i ~= 1 then
             fullname = fullname .. i
         end
-
+        if replacer then replacer.blacklist[fullname] = true end
         core.register_node(fullname, {
             description = description,
             groups = {cracky = level},
@@ -71,9 +71,23 @@ local function register_stone(texture, name, description, level, tier, max_digs)
                     inv:add_item("main", "default:cobble")
                 end
 
-             core.sound_play("default_cool_lava", {pos = pos, gain = 0.5})
+                core.sound_play("default_cool_lava", {pos = pos, gain = 0.5})
             end,
-            drop = "default:cobble"
+            drop = "default:cobble",
+            on_blast = function(pos)
+                local node = core.get_node(pos)
+                local current_digs = node.param2
+
+                if current_digs >= max_digs - 1 then
+                    core.node_dig(pos, node, digger)
+                    return
+                end
+                if nodes[current_digs] then node.name = nodes[current_digs] end
+                node.param2 = current_digs + 1
+                core.swap_node(pos, node)
+
+                core.sound_play("default_cool_lava", {pos = pos, gain = 0.5})
+            end
         })
     end
     table.insert(deepcaves.stones, {
