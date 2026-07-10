@@ -23,13 +23,13 @@ local function register_stone(texture, name, description, level, tier, max_digs)
 
     local nodes = {}
     --map variants to digs
-    if variants <= 6 then
+    if max_digs <= 6 then
         for i = 1, variants - 1 do
             nodes[i] = "deepcaves:" .. name .. (i + 1)
         end
     else
         local function findstep(i)
-            return math.max(math.ceil(6 * i / max_digs), 6)
+            return math.min(math.ceil(6 * i / max_digs), 6)
         end
         
         local prev_successful_index = 1
@@ -50,9 +50,8 @@ local function register_stone(texture, name, description, level, tier, max_digs)
             fullname = fullname .. i
         end
 
-        local crack_overlay = overlays[i]
         core.register_node(fullname, {
-            title = title,
+            description = description,
             groups = {cracky = level},
             tiles = {texture .. overlays[i]},
             node_dig_prediction = fullname,
@@ -63,18 +62,18 @@ local function register_stone(texture, name, description, level, tier, max_digs)
                     core.node_dig(pos, node, digger)
                     return
                 end
-                if nodes[i] then node.name = nodes[i] end
-                node.param2 = current_digs + 1
-
-                core.swap_node(pos, node)
-
-                local inventory = digger:get_inventory()
-                if inventory then
-                    inventory:add_item("main", "default:cobble 1")
+                if nodes[current_digs] then node.name = nodes[current_digs] end
+                local dug = core.node_dig(pos, node, digger)
+                if dug then
+                    node.param2 = current_digs + 1
+                    core.swap_node(pos, node)
+                    local inv = digger:get_inventory()
+                    inv:add_item("main", "default:cobble")
                 end
 
              core.sound_play("default_cool_lava", {pos = pos, gain = 0.5})
             end,
+            drop = "default:cobble"
         })
     end
     table.insert(deepcaves.stones, {
@@ -86,4 +85,4 @@ local function register_stone(texture, name, description, level, tier, max_digs)
     })
 end
 
-register_stone("deepcaves_densestone1.png", "dense_stone", "Dense Stone", 2, 2, 5)
+register_stone("deepcaves_densestone1.png", "dense_stone", "Dense Stone", 3, 2, 100)
