@@ -4,7 +4,7 @@ local function register_stone(texture, name, description, level, tier, max_digs)
     local variants
     --calculate number needed to reigister
     if max_digs <= 6 then
-           variants = max_digs
+        variants = max_digs
     else
         variants = 6
     end
@@ -28,6 +28,7 @@ local function register_stone(texture, name, description, level, tier, max_digs)
             nodes[i] = "deepcaves:" .. name .. (i + 1)
         end
     else
+        --calculate how the steps are divided
         local function findstep(i)
             return math.min(math.ceil(6 * i / max_digs), 6)
         end
@@ -43,7 +44,7 @@ local function register_stone(texture, name, description, level, tier, max_digs)
         end
     end
 
-    
+    --register the nodes
     for i = 1, variants do
         local fullname = "deepcaves:" .. name
         if i ~= 1 then
@@ -64,16 +65,15 @@ local function register_stone(texture, name, description, level, tier, max_digs)
                 end
                 if nodes[current_digs] then node.name = nodes[current_digs] end
                 local dug = core.node_dig(pos, node, digger)
+
                 if dug then
                     node.param2 = current_digs + 1
                     core.swap_node(pos, node)
-                    local inv = digger:get_inventory()
-                    inv:add_item("main", "default:cobble")
                 end
-
-                core.sound_play("default_cool_lava", {pos = pos, gain = 0.5})
             end,
+
             drop = "default:cobble",
+
             on_blast = function(pos)
                 local node = core.get_node(pos)
                 local current_digs = node.param2
@@ -82,16 +82,18 @@ local function register_stone(texture, name, description, level, tier, max_digs)
                     core.node_dig(pos, node, digger)
                     return
                 end
+
                 if nodes[current_digs] then node.name = nodes[current_digs] end
                 node.param2 = current_digs + 1
                 core.swap_node(pos, node)
-
-                core.sound_play("default_cool_lava", {pos = pos, gain = 0.5})
+                return {"default:cobble"}
             end,
             --to make undiggable by technic quarry
-            _mcl_hardness = -1
+            _mcl_hardness = -1,
+        	sounds = default.node_sound_stone_defaults(),
         })
     end
+
     table.insert(deepcaves.stones, {
         texture = texture,
         name = name,
@@ -101,4 +103,5 @@ local function register_stone(texture, name, description, level, tier, max_digs)
     })
 end
 
-register_stone("deepcaves_densestone1.png", "dense_stone", "Dense Stone", 3, 2, 100)
+register_stone("deepcaves_densestone1.png", "dense_stone", "Dense Stone", 3, 2, 10)
+register_stone("deepcaves_densestone1.png", "denser_stone", "Denser Stone", 1, 2, 100)

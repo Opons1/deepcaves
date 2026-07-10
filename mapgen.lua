@@ -22,6 +22,7 @@ local c_stone = core.get_content_id("deepcaves:dense_stone")
 local c_mt_stone = core.get_content_id("default:stone")
 local c_air = core.get_content_id("air")
 local c_mossycobble = core.get_content_id("default:mossycobble")
+local c_cobble = core.get_content_id("default:cobble")
 
 --fluids to annihlate
 local c_water = core.get_content_id("default:water_source")
@@ -39,8 +40,18 @@ file:close()
 
 local ores = core.deserialize(content)
 
-
-
+--store all the ground content now, imagine the pain of getting every node ever
+local not_ground_content = {}
+for name, def in pairs(core.registered_nodes) do
+    if def.is_ground_content == false then
+        local cid = core.get_content_id(name)
+        not_ground_content[cid] = true
+    end
+end
+not_ground_content[c_mossycobble] = false
+not_ground_content[c_water] = false
+not_ground_content[c_lava] = false
+not_ground_content[c_cobble] = false
 local actions = {
     [c_air] = c_stone,
     [c_mt_stone] = c_stone,
@@ -88,8 +99,10 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
             for y = y0, y1 do
                 local vi = area:index(x, y, z)
                 if not (y <= surface_y or y >= cieling_y) then
-                    data[vi] = c_air
-                    light_data[vi] = 255 
+                    if not not_ground_content[data[vi]] then
+                        data[vi] = c_air
+                        light_data[vi] = 255
+                    end
                 else
                     if ores[data[vi]] then
                         data[vi] = ores[data[vi]][1]
