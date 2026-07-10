@@ -1,5 +1,5 @@
 deepcaves.stones = {}
-local function register_stone(texture, name, description, level, tier, max_digs)
+local function register_stone(texture, name, description, level, tier, max_digs, drop, not_stone)
     --total stone types
     local variants
     --calculate number needed to reigister
@@ -51,9 +51,15 @@ local function register_stone(texture, name, description, level, tier, max_digs)
             fullname = fullname .. i
         end
         if replacer then replacer.blacklist[fullname] = true end
+        
+        local groups = {cracky = level}
+        if i ~= 1 then
+            groups.not_in_creative_inventory = 1
+        end
+
         core.register_node(fullname, {
             description = description,
-            groups = {cracky = level},
+            groups = groups,
             tiles = {texture .. overlays[i]},
             node_dig_prediction = fullname,
             on_dig = function(pos, node, digger)
@@ -72,7 +78,7 @@ local function register_stone(texture, name, description, level, tier, max_digs)
                 end
             end,
 
-            drop = "default:cobble",
+            drop = "default:cobble" or drop,
 
             on_blast = function(pos)
                 local node = core.get_node(pos)
@@ -93,15 +99,21 @@ local function register_stone(texture, name, description, level, tier, max_digs)
         	sounds = default.node_sound_stone_defaults(),
         })
     end
-
-    table.insert(deepcaves.stones, {
-        texture = texture,
-        name = name,
-        description = description,
-        level = level,
-        tier = tier,
-    })
+    if not not_stone then
+        table.insert(deepcaves.stones, {
+            texture = texture,
+            name = name,
+            description = description,
+            level = level,
+            tier = tier,
+        })
+    end
 end
 
 register_stone("deepcaves_densestone1.png", "dense_stone", "Dense Stone", 3, 2, 10)
 register_stone("deepcaves_densestone1.png", "denser_stone", "Denser Stone", 1, 2, 100)
+if core.get_modpath("technic") then
+    register_stone("technic_granite.png^(technic_granite.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_granite", "Dense Granite", 1, 2, 10, "technic:granite", true)
+    register_stone("technic_marble.png^(technic_marble.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_marble", "Dense Marble", 1, 2, 10, "technic:marble", true)
+
+end

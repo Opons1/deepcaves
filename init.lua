@@ -19,3 +19,6 @@ end
 core.register_mapgen_script(mp .. "/mapgen.lua")
 
 deepcaves.modpath = nil
+
+--notes
+--underworlds ends at -24755

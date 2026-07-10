@@ -1,4 +1,4 @@
-local miny = -3331
+local maxy = -24771
 local noise_params = {
     offset = 2,
     scale = 1,
@@ -62,9 +62,19 @@ local actions = {
     [c_silver_sand] = c_stone,
 
 }
+if core.registered_nodes["deepcaves:dense_granite"] then
+    local c_granite = core.get_content_id("technic:granite")
+    local c_dense_granite = core.get_content_id("deepcaves:dense_granite")
+    actions[c_granite] = c_dense_granite
+end
 
+if core.registered_nodes["deepcaves:dense_marble"] then
+    local c_granite = core.get_content_id("technic:marble")
+    local c_dense_granite = core.get_content_id("deepcaves:dense_marble")
+    actions[c_granite] = c_dense_granite
+end
 core.register_on_generated(function(vm, minp, maxp, blockseed)
-    if maxp.y < miny then return end
+    if maxp.y > maxy then return end
     local light_data = vm:get_light_data() 
     local data = vm:get_data()
     
@@ -93,8 +103,8 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
             n_idx = n_idx + 1
 
             local surface_y_add = noise_val * noise_val * noise_val * noise_val
-            local surface_y = miny + surface_y_add + 10
-            local cieling_y = miny + noise_valc * noise_valc * noise_valc - surface_y_add*3 + 140
+            local surface_y = maxy - 200 + surface_y_add + 10
+            local cieling_y = maxy - 200 + noise_valc * noise_valc * noise_valc - surface_y_add*3 + 140
             
             for y = y0, y1 do
                 local vi = area:index(x, y, z)
