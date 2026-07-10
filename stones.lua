@@ -89,7 +89,7 @@ local function register_stone(texture, name, description, level, tier, max_digs)
                 core.sound_play("default_cool_lava", {pos = pos, gain = 0.5})
             end,
             --to make undiggable by technic quarry
-            mcl_hardness = -1
+            _mcl_hardness = -1
         })
     end
     table.insert(deepcaves.stones, {
