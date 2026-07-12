@@ -53,6 +53,7 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         if replacer then replacer.blacklist[fullname] = true end
         
         local groups = {cracky = level}
+        groups.level = 2
         if i ~= 1 then
             groups.not_in_creative_inventory = 1
         end
@@ -85,8 +86,8 @@ local function register_stone(texture, name, description, level, tier, max_digs,
                 local current_digs = node.param2
 
                 if current_digs >= max_digs - 1 then
-                    core.node_dig(pos, node, digger)
-                    return
+                    core.set_node(pos, {name = "air"})
+                    return {"default:cobble"}
                 end
 
                 if nodes[current_digs] then node.name = nodes[current_digs] end
@@ -110,26 +111,30 @@ local function register_stone(texture, name, description, level, tier, max_digs,
     end
 end
 
-local function get_random_color()
-    local r = math.random(0, 255)
-    local g = math.random(0, 255)
-    local b = math.random(0, 255)
+local pcg = PcgRandom(110)
 
+local function get_random_color()
+    local r = pcg:next(0, 135)
+    local g = pcg:next(0, 135)
+    local b = pcg:next(0, 135)
     return core.colorspec_to_colorstring({r = r, g = g, b = b})
 end
 
 
 local texture = "deepcaves_densestone1.png"
-local textureoverlay = "^(deepcaves_densestone1.png^[opacity:100^[transformR90)"
-for i = 1, 40 do
-    texture = texture .. "^[colorize:#000000:30"
-    local utext = texture .. textureoverlay
-    local drops = math.floor(i/5) + 1
-    local digs = i * 2
-    register_stone(utext, "dense_stone" .. i .. "_", "Dense Stone " .. i, 3, drops, digs, "default:cobble")
-    texture = texture .. "^[colorize:" .. get_random_color() .. ":40"
+local texture_overlay = "^(deepcaves_densestone1.png^[opacity:150^[transformR90)"
+local color_layer = "^(deepcaves_densestone1.png^[fill:16x16:0,0:#888888"
 
+for i = 1, 26 do
+    color_layer = color_layer .. "^[colorize:#000000:30"    
+    color_layer = color_layer .. "^[colorize:" .. get_random_color() .. ":60"
+    local utext = texture .. texture_overlay .. color_layer .. "^[opacity:" .. (140 + i * 2) .. ")"    
+    local drops = math.floor(i/2) + 1
+    local digs = i * 2 + 10
+    register_stone(utext, "dense_stone" .. i .. "_", "Dense Stone " .. i, 1, drops, digs, "default:cobble")
 end
+
+
 
 if core.get_modpath("technic") then
     register_stone("technic_granite.png^(technic_granite.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_granite", "Dense Granite", 1, 2, 10, "technic:granite", true)

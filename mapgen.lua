@@ -1,5 +1,17 @@
 local maxy = -24755
-local noise_params = {
+
+local noise_params1 = {
+    offset = 2,
+    scale = 1,
+    spread = {x = 30, y = 30, z = 30},
+    seed = 54321,
+    octaves = 2,
+    persist = 0.4,
+    lacunarity = 4,
+    flags = "defaults"
+}
+
+local noise_params2 = {
     offset = 2,
     scale = 1,
     spread = {x = 30, y = 30, z = 30},
@@ -24,7 +36,8 @@ local buffer_surface = {}
 local buffer_ceiling = {}
 --stones
 local c_stones = {}
-for i = 1, 40 do
+
+for i = 1, 26 do
     table.insert(c_stones, core.get_content_id("deepcaves:dense_stone" .. i .. "_"))
 end
 
@@ -34,7 +47,7 @@ local c_mt_stone = core.get_content_id("default:stone")
 local c_air = core.get_content_id("air")
 local c_mossycobble = core.get_content_id("default:mossycobble")
 local c_cobble = core.get_content_id("default:cobble")
-
+local c_stair = core.get_content_id("stairs:stair_cobble")
 --fluids to annihlate
 local c_water = core.get_content_id("default:water_source")
 local c_lava = core.get_content_id("default:lava_source")
@@ -90,6 +103,15 @@ if core.registered_nodes["deepcaves:dense_marble"] then
     actions[c_marble] = function(lev) return c_dense_marble end
 end
 
+local function ifhasthenadd(name)
+    if core.registered_nodes[name] then
+        local c_name = core.get_content_id(name)
+        actions[c_name] = function(lev) return tostone(lev) end
+    end
+end
+
+
+
 core.register_on_generated(function(vm, minp, maxp, blockseed)
     if minp.y > maxy then return end
     local light_data = vm:get_light_data() 
@@ -108,11 +130,11 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
 
     local map_size = {x = side_x, y = side_z}
 
-    map_surface = map_surface or core.get_perlin_map(noise_params, map_size)
-    map_ceiling = map_ceiling or core.get_perlin_map(noise_params, map_size)
+    map_surface = map_surface or core.get_perlin_map(noise_params1, map_size)
+    map_ceiling = map_ceiling or core.get_perlin_map(noise_params2, map_size)
 
-    local noise_surface = map_surface:get_2d_map_flat({x = x0, y = z0}, buffer_surface)
-    local noise_ceiling = map_ceiling:get_2d_map_flat({x = x0 + 100, y = z0 + 100}, buffer_ceiling)
+    local noise_surface = map_surface:get_2d_map_flat({x = x0, y = z0, z = key}, buffer_surface)
+    local noise_ceiling = map_ceiling:get_2d_map_flat({x = x0, y = z0, z = key}, buffer_ceiling)
 
     local n_idx = 1
     for z = z0, z1 do

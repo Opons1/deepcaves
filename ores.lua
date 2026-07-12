@@ -10,7 +10,8 @@ local function register_ore(data)
             description = stone.description .. data.description,
             tiles = {stone.texture .. "^" .. data.tiles},
             groups = groups,
-            drop = data.drop .. " " .. stone.tier
+            drop = data.drop .. " " .. stone.tier,
+            light_source = data.light_source or 0
         })
         local orecid = core.get_content_id("deepcaves:" .. stone.name .. data.name)
         table.insert(ores, orecid)
@@ -127,6 +128,109 @@ if core.get_modpath("technic") then
         groups = {cracky = 1, level = 2}
     })
 end
+
+if core.get_modpath("blox") then
+
+    register_ore({
+        name = "dense_glow_ore",
+        tiles = gdtxt("blox_glowore.png"),
+        description = " Dense Glow Ore",
+        drop = "blox:glowdust",
+        ore = "blox:glowore",
+        groups = {cracky = 1, level = 2},
+        light_source = 8,
+    })
+end
+
+if core.get_modpath("terumet") then
+    register_ore({
+        name = "dense_terumetal_ore",
+        tiles = gdtxt("terumet_ore_dense_raw.png"),
+        description = " Dense Terumetal Ore",
+        drop = "terumet:lump_raw",
+        ore = "terumet:ore_raw",
+        groups = {cracky = 1, level = 2},
+    })
+
+    register_ore({
+        name = "dense_terumetal_ore2",
+        tiles = gdtxt("terumet_ore_dense_raw.png"),
+        description = " Dense Terumetal Ore",
+        drop = "terumet:lump_raw",
+        ore = "terumet:ore_dense_raw",
+        groups = {cracky = 1, level = 2},
+    })
+end
+
+if core.get_modpath("gs_amethyst") then
+    register_ore({
+        name = "dense_amethyst",
+        tiles = gdtxt("gs_amethyst_ore.png"),
+        description = " Dense Amethyst Ore",
+        drop = "gs_amethyst:amethyst_ingot",
+        ore = "gs_amethyst:amethyst_ore",
+        groups = {cracky = 1, level = 3},
+    })
+end
+
+if core.get_modpath("gs_emerald") then
+    register_ore({
+        name = "dense_emerald",
+        tiles = gdtxt("gs_emerald_ore.png"),
+        description = " Dense Emerald Ore",
+        drop = "gs_emerald:emerald",
+        ore = "gs_emerald:emerald_ore",
+        groups = {cracky = 1, level = 3},
+    })
+end
+
+
+if core.get_modpath("gs_ruby") then
+    register_ore({
+        name = "dense_ruby",
+        tiles = gdtxt("gs_ruby_ore.png"),
+        description = " Dense Ruby Ore",
+        drop = "gs_ruby:ruby",
+        ore = "gs_ruby:ruby_ore",
+        groups = {cracky = 1, level = 3},
+    })
+end
+
+if core.get_modpath("gs_sapphire") then
+    register_ore({
+        name = "dense_sapphire",
+        tiles = gdtxt("gs_sapphire_ore.png"),
+        description = " Dense Sapphire Ore",
+        drop = "gs_sapphire:sapphire",
+        ore = "gs_sapphire:sapphire_ore",
+        groups = {cracky = 1, level = 3},
+    })
+end
+
+if core.get_modpath("lapis") then
+    register_ore({
+        name = "dense_lapis",
+        tiles = gdtxt("lapis_mineral_lapislazuli.png"),
+        description = " Dense Lapis Lazuli Ore",
+        drop = "lapis:lapis",
+        ore = "lapis:stone_with_lapis",
+        groups = {cracky = 1, level = 2},
+    })
+end
+
+if core.get_modpath("quartz") then
+    register_ore({
+        name = "dense_quartz",
+        tiles = gdtxt("quartz_ore.png"),
+        description = " Dense Quartz Ore",
+        drop = "quartz:quartz_crystal",
+        ore = "quartz:quartz_ore",
+        groups = {cracky = 1, level = 2},
+    })
+end
+
+
+
 --writing the data to be read later
 local storage_path = core.get_worldpath() .. "/deepcavesoredata.txt"
 local file, err = io.open(storage_path, "w") 
