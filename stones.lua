@@ -110,8 +110,27 @@ local function register_stone(texture, name, description, level, tier, max_digs,
     end
 end
 
-register_stone("deepcaves_densestone1.png", "dense_stone", "Dense Stone", 3, 2, 10)
-register_stone("deepcaves_densestone1.png", "denser_stone", "Denser Stone", 1, 2, 100)
+local function get_random_color()
+    local r = math.random(0, 255)
+    local g = math.random(0, 255)
+    local b = math.random(0, 255)
+
+    return core.colorspec_to_colorstring({r = r, g = g, b = b})
+end
+
+
+local texture = "deepcaves_densestone1.png"
+local textureoverlay = "^(deepcaves_densestone1.png^[opacity:100^[transformR90)"
+for i = 1, 40 do
+    texture = texture .. "^[colorize:#000000:30"
+    local utext = texture .. textureoverlay
+    local drops = math.floor(i/5) + 1
+    local digs = i * 2
+    register_stone(utext, "dense_stone" .. i .. "_", "Dense Stone " .. i, 3, drops, digs, "default:cobble")
+    texture = texture .. "^[colorize:" .. get_random_color() .. ":40"
+
+end
+
 if core.get_modpath("technic") then
     register_stone("technic_granite.png^(technic_granite.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_granite", "Dense Granite", 1, 2, 10, "technic:granite", true)
     register_stone("technic_marble.png^(technic_marble.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_marble", "Dense Marble", 1, 2, 10, "technic:marble", true)

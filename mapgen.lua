@@ -1,4 +1,4 @@
-local maxy = -24771
+local maxy = -24755
 local noise_params = {
     offset = 2,
     scale = 1,
@@ -10,15 +10,26 @@ local noise_params = {
     flags = "defaults"
 }
 
+local function calculatemaplayer(y)
+    local depth = maxy - y
+    local level = math.floor(depth / 240) + 1
+    level = math.max(1, math.abs(level))
+    local key = maxy - ((level - 1) * 240) - 120
+    return key, level
+end
 local map_surface = nil
 local map_ceiling = nil
 
 local buffer_surface = {}
 local buffer_ceiling = {}
+--stones
+local c_stones = {}
+for i = 1, 40 do
+    table.insert(c_stones, core.get_content_id("deepcaves:dense_stone" .. i .. "_"))
+end
 
 local c_gravel = core.get_content_id("default:gravel")
 local c_silver_sand = core.get_content_id("default:silver_sand")
-local c_stone = core.get_content_id("deepcaves:dense_stone")
 local c_mt_stone = core.get_content_id("default:stone")
 local c_air = core.get_content_id("air")
 local c_mossycobble = core.get_content_id("default:mossycobble")
@@ -48,41 +59,49 @@ for name, def in pairs(core.registered_nodes) do
         not_ground_content[cid] = true
     end
 end
+
 not_ground_content[c_mossycobble] = false
 not_ground_content[c_water] = false
 not_ground_content[c_lava] = false
 not_ground_content[c_cobble] = false
-local actions = {
-    [c_air] = c_stone,
-    [c_mt_stone] = c_stone,
-    [c_water] = c_stone,
-    [c_lava] = c_stone,
-    [c_mossycobble] = c_stone,
-    [c_gravel] = c_stone,
-    [c_silver_sand] = c_stone,
+local function tostone(lev)
+    return c_stones[lev]
+end
 
+local actions = {
+    [c_air] = function(lev) return tostone(lev) end,
+    [c_mt_stone] = function(lev) return tostone(lev) end,
+    [c_water] = function(lev) return tostone(lev) end,
+    [c_lava] = function(lev) return tostone(lev) end,
+    [c_mossycobble] = function(lev) return tostone(lev) end,
+    [c_gravel] = function(lev) return tostone(lev) end,
+    [c_silver_sand] = function(lev) return tostone(lev) end,
 }
+
 if core.registered_nodes["deepcaves:dense_granite"] then
     local c_granite = core.get_content_id("technic:granite")
     local c_dense_granite = core.get_content_id("deepcaves:dense_granite")
-    actions[c_granite] = c_dense_granite
+    actions[c_granite] = function(lev) return c_dense_granite end
 end
 
 if core.registered_nodes["deepcaves:dense_marble"] then
-    local c_granite = core.get_content_id("technic:marble")
-    local c_dense_granite = core.get_content_id("deepcaves:dense_marble")
-    actions[c_granite] = c_dense_granite
+    local c_marble = core.get_content_id("technic:marble")
+    local c_dense_marble = core.get_content_id("deepcaves:dense_marble")
+    actions[c_marble] = function(lev) return c_dense_marble end
 end
+
 core.register_on_generated(function(vm, minp, maxp, blockseed)
-    if maxp.y > maxy then return end
+    if minp.y > maxy then return end
     local light_data = vm:get_light_data() 
     local data = vm:get_data()
+    local key, lev = calculatemaplayer(minp.y)
+    print(lev)
     
     local emin, emax = vm:get_emerged_area()
     local area = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
 
-    local x0, y0, z0 = emin.x, emin.y, emin.z
-    local x1, y1, z1 = emax.x, emax.y, emax.z
+    local x0, y0, z0 = emin.x, minp.y, emin.z
+    local x1, y1, z1 = emax.x, maxp.y, emax.z
 
     local side_x = x1 - x0 + 1
     local side_z = z1 - z0 + 1
@@ -103,21 +122,21 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
             n_idx = n_idx + 1
 
             local surface_y_add = noise_val * noise_val * noise_val * noise_val
-            local surface_y = maxy - 200 + surface_y_add + 10
-            local cieling_y = maxy - 200 + noise_valc * noise_valc * noise_valc - surface_y_add*3 + 140
+            local surface_y = key - 40 + surface_y_add + 10
+            local cieling_y = key - 40 + noise_valc * noise_valc * noise_valc - surface_y_add*3 + 140
             
             for y = y0, y1 do
                 local vi = area:index(x, y, z)
-                if not (y <= surface_y or y >= cieling_y) then
+                if not (y <= surface_y or y >= cieling_y) and y < maxy then
                     if not not_ground_content[data[vi]] then
                         data[vi] = c_air
                         light_data[vi] = 255
                     end
                 else
                     if ores[data[vi]] then
-                        data[vi] = ores[data[vi]][1]
+                        data[vi] = ores[data[vi]][lev]
                     elseif actions[data[vi]] then
-                        data[vi] = actions[data[vi]]
+                        data[vi] = actions[data[vi]](lev) or actions[data[vi]]
                     end
                 end
             end
