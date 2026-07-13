@@ -112,6 +112,6 @@ core.register_node("deepcaves:glow_large_vine", {
 	waving = 1,
     light_source = 8,
 	is_ground_content = false,
-	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
+	groups = {snappy = 3, flammable = 2, leaves = 1},
 	sounds = default.node_sound_leaves_defaults(),
 })
