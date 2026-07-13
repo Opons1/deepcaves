@@ -36,9 +36,11 @@ local buffer_surface = {}
 local buffer_ceiling = {}
 --stones
 local c_stones = {}
+local is_stone = {}
 
 for i = 1, 26 do
     table.insert(c_stones, core.get_content_id("deepcaves:dense_stone" .. i .. "_"))
+    is_stone[core.get_content_id("deepcaves:dense_stone" .. i .. "_")] = true
 end
 
 local c_gravel = core.get_content_id("default:gravel")
@@ -51,6 +53,17 @@ local c_stair = core.get_content_id("stairs:stair_cobble")
 --fluids to annihlate
 local c_water = core.get_content_id("default:water_source")
 local c_lava = core.get_content_id("default:lava_source")
+--LAYER 2
+local c_glowstone = core.get_content_id("deepcaves:glowstone")
+local c_glowstoneground = core.get_content_id("deepcaves:glowstoneground")
+local c_glowtrunk = core.get_content_id("deepcaves:glowtrunk")
+local c_glowleaves1 = core.get_content_id("deepcaves:glowleaves")
+local c_glowleaves2 = core.get_content_id("deepcaves:glowleaves2")
+local c_glowgrass = core.get_content_id("deepcaves:stone_with_glow_grass")
+local c_glow_grasses1 = core.get_content_id("deepcaves:glow_grass")
+local c_glow_grasses2 = core.get_content_id("deepcaves:glow_grass2")
+local c_glow_large_vine = core.get_content_id("deepcaves:glow_large_vine")
+
 
 local orepath = core.get_worldpath() .. "/deepcavesoredata.txt"
 
@@ -110,11 +123,107 @@ local function ifhasthenadd(name)
     end
 end
 
-
+local keygenscripts = {
+    [1] = function(vi)
+        return false
+    end,
+    [2] = function(area, data, x, y, z, seed)
+        local vi = area:index(x, y, z)
+        local randomnum = PcgRandom(seed)
+        local vi1up = area:index(x, y + 1, z)
+        if data[vi] == c_air then
+            local vinechance = randomnum:next(1, 70)
+            if is_stone[data[vi1up]] and vinechance == 1 then
+                local hit = false
+                local next = 1
+                local len = randomnum:next(13, 23)
+                for i = 0, len do
+                    local vi1 = area:index(x, y - i, z)
+                    local vi2 = area:index(x + 1, y - i, z)
+                    local vi3 = area:index(x - 1, y - i, z)
+                    local vi4 = area:index(x, y - i, z + 1)
+                    local vi5 = area:index(x, y - i, z - 1)
+                    if data[vi1] == c_air then
+                        data[vi1] = c_glow_large_vine
+                    end
+                    if data[vi2] == c_air and i < len - 1 then
+                        data[vi2] = c_glow_large_vine
+                    end
+                    if data[vi3] == c_air and i < len - 2 then
+                        data[vi3] = c_glow_large_vine
+                    end
+                    if data[vi4] == c_air and i < len - 3 then
+                        data[vi4] = c_glow_large_vine
+                    end
+                    if data[vi5] == c_air and i < len - 3 then
+                        data[vi5] = c_glow_large_vine
+                    end
+                end
+            else
+                local yneeded = randomnum:next(-10, 10) - 25070
+                local chance = randomnum:next(1, 200)
+                if y > yneeded and chance == 1 then
+                    data[vi] = c_glowstone
+                end
+                return
+            end
+        end
+        if data[vi1up] == c_air and is_stone[data[vi]] then
+            data[vi] = c_glowgrass
+            local chance = randomnum:next(1, 60)
+            if chance == 1 then
+                local height = randomnum:next(10, 30)
+                local rad = 0
+                local leaftype = randomnum:next(1, 2)
+                local c_glowleaves
+                if leaftype == 1 then
+                    c_glowleaves = c_glowleaves1
+                else
+                    c_glowleaves = c_glowleaves2
+                end
+                for ymod = 1, height + 5 do
+                    local vi = area:index(x, y + ymod, z)
+                    if data[vi] == c_air then
+                        if ymod <= height then
+                            data[vi] = c_glowtrunk
+                        end
+                        if ymod > 5 then
+                            if ymod > height then
+                                rad = math.max(rad - 1, -1)
+                            else
+                                rad = math.max(math.min(randomnum:next(-1, 1) + rad, 4), 1)
+                            end
+                            local y = y + ymod
+                            local x1 = x - rad
+                            local x2 = x + rad
+                            local z1 = z - rad
+                            local z2 = z + rad
+                            if rad ~= -1 then
+                                for x = x1, x2 do
+                                    for z = z1, z2 do
+                                        local vi = area:index(x, y, z)
+                                        if data[vi] == c_air then
+                                            data[vi] = c_glowleaves
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            elseif chance > 30 then
+                if chance < 45 then
+                    data[vi1up] = c_glow_grasses1
+                else
+                    data[vi1up] = c_glow_grasses2
+                end
+            end
+        end
+    end,
+}
 
 core.register_on_generated(function(vm, minp, maxp, blockseed)
     if minp.y > maxy then return end
-    local light_data = vm:get_light_data() 
     local data = vm:get_data()
     local key, lev = calculatemaplayer(minp.y)
     print(lev)
@@ -152,7 +261,6 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
                 if not (y <= surface_y or y >= cieling_y) and y < maxy then
                     if not not_ground_content[data[vi]] then
                         data[vi] = c_air
-                        light_data[vi] = 255
                     end
                 else
                     if ores[data[vi]] then
@@ -164,6 +272,26 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
             end
         end
     end
-    vm:set_light_data(light_data)
+
+    local pos = {}
+    for z = minp.z, maxp.z do
+        pos.z = z
+        for x = minp.x, maxp.x do
+            pos.x = x
+            for y = minp.y, maxp.y do
+                pos.y = y
+                local seed = core.hash_node_position(pos)
+                if keygenscripts[lev] then
+                    keygenscripts[lev](area, data, x, y, z, seed)
+                end
+            end
+        end
+    end
+
+
+
+    --now the fun part
+
     vm:set_data(data)
+	vm:calc_lighting()
 end)

@@ -124,7 +124,7 @@ end
 local texture = "deepcaves_densestone1.png"
 local texture_overlay = "^(deepcaves_densestone1.png^[opacity:150^[transformR90)"
 local color_layer = "^(deepcaves_densestone1.png^[fill:16x16:0,0:#888888"
-
+--1 to 26
 for i = 1, 26 do
     color_layer = color_layer .. "^[colorize:#000000:30"    
     color_layer = color_layer .. "^[colorize:" .. get_random_color() .. ":60"
@@ -135,7 +135,7 @@ for i = 1, 26 do
 end
 
 
-
+--27 and 28
 if core.get_modpath("technic") then
     register_stone("technic_granite.png^(technic_granite.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_granite", "Dense Granite", 1, 2, 10, "technic:granite", true)
     register_stone("technic_marble.png^(technic_marble.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_marble", "Dense Marble", 1, 2, 10, "technic:marble", true)

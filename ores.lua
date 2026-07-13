@@ -21,6 +21,7 @@ end
 local function gdtxt(texture)
     return "([combine:16x16:0,0=" .. texture .. "^[combine:16x16:1,-1=" .. texture .. ")"
 end
+
 register_ore({
     name = "dense_coal_ore",
     tiles = gdtxt("default_mineral_coal.png"),
@@ -229,6 +230,17 @@ if core.get_modpath("quartz") then
     })
 end
 
+local function register_ore_for_stone(data)
+    local stone = deepcaves.stones[data.stone]
+    local texture = stone.texture
+    core.register_node(data.name, {
+        description = data.description,
+        groups = data.groups,
+        tiles = {texture},
+        light_source = data.light_source or 0,
+        drop = data.drop,
+    })
+end
 
 
 --writing the data to be read later
