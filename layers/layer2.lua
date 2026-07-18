@@ -96,6 +96,17 @@ core.register_node("deepcaves:glowleaves2", {
 	sounds = default.node_sound_leaves_defaults(),
 })
 
+core.register_node("deepcaves:glowstone", {
+    description = "Floating Glowstone",
+    tiles = {"deepcaves_glow.png"},
+    is_ground_content = false,
+    light_source = 14
+})
+--ores
+
+
+
+
 --deco
 core.register_decoration({
     deco_type = "simple",
@@ -130,7 +141,8 @@ core.register_decoration({
 core.register_decoration({
     deco_type = "schematic",
     place_on = "deepcaves:glowtrunk",
-    fill_ratio = 0.5,
+    sidelen = 4,
+    fill_ratio = 1,
     flags = "all_floors, force_placement, place_center_x, place_center_z",
     schematic = mp .. "/schematics/deepcaves_glowtree1.mts"
 })

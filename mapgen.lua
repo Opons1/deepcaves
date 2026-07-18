@@ -54,6 +54,7 @@ local c_stair = core.get_content_id("stairs:stair_cobble")
 local c_water = core.get_content_id("default:water_source")
 local c_lava = core.get_content_id("default:lava_source")
 --LAYER 2
+local c_glowstone = core.get_content_id("deepcaves:glowstone")
 
 
 
@@ -116,13 +117,19 @@ local function ifhasthenadd(name)
         actions[c_name] = function(lev) return tostone(lev) end
     end
 end
-
 local keygenscripts = {
     [1] = function(vi)
         return false
     end,
     --glow trees
     [2] = function(area, data, x, y, z, seed)
+        if y > -25075 and y < -25065 then
+            local vi = area:index(x, y, z)
+            local rand = PcgRandom(core.hash_node_position({x = x, y = y, z = z}))
+            if rand:next(1, 125) == 1 then
+                data[vi] = c_glowstone
+            end
+        end
     end,
     [3] = function(area, data, x, y, z, seed)
     end,
