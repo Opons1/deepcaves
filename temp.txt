@@ -1,0 +1,91 @@
+local vi = area:index(x, y, z)
+        local randomnum = PcgRandom(seed)
+        local vi1up = area:index(x, y + 1, z)
+        if data[vi] == c_air then
+            local vinechance = randomnum:next(1, 70)
+            if is_stone[data[vi1up]] and vinechance == 1 then
+                local hit = false
+                local next = 1
+                local len = randomnum:next(13, 23)
+                for i = 0, len do
+                    local vi1 = area:index(x, y - i, z)
+                    local vi2 = area:index(x + 1, y - i, z)
+                    local vi3 = area:index(x - 1, y - i, z)
+                    local vi4 = area:index(x, y - i, z + 1)
+                    local vi5 = area:index(x, y - i, z - 1)
+                    if data[vi1] == c_air then
+                        data[vi1] = c_glow_large_vine
+                    end
+                    if data[vi2] == c_air and i < len - 1 then
+                        data[vi2] = c_glow_large_vine
+                    end
+                    if data[vi3] == c_air and i < len - 2 then
+                        data[vi3] = c_glow_large_vine
+                    end
+                    if data[vi4] == c_air and i < len - 3 then
+                        data[vi4] = c_glow_large_vine
+                    end
+                    if data[vi5] == c_air and i < len - 3 then
+                        data[vi5] = c_glow_large_vine
+                    end
+                end
+            else
+                local yneeded = randomnum:next(-10, 10) - 25070
+                local chance = randomnum:next(1, 500)
+                if y > yneeded and chance == 1 then
+                    data[vi] = c_glowstone
+                end
+                return
+            end
+        end
+        if data[vi1up] == c_air and is_stone[data[vi]] then
+            data[vi] = c_glowgrass
+            local chance = randomnum:next(1, 60)
+            if chance == 1 then
+                local height = randomnum:next(10, 30)
+                local rad = 0
+                local leaftype = randomnum:next(1, 2)
+                local c_glowleaves
+                if leaftype == 1 then
+                    c_glowleaves = c_glowleaves1
+                else
+                    c_glowleaves = c_glowleaves2
+                end
+                for ymod = 1, height + 5 do
+                    local vi = area:index(x, y + ymod, z)
+                    if data[vi] == c_air then
+                        if ymod <= height then
+                            data[vi] = c_glowtrunk
+                        end
+                        if ymod > 5 then
+                            if ymod > height then
+                                rad = math.max(rad - 1, -1)
+                            else
+                                rad = math.max(math.min(randomnum:next(-1, 1) + rad, 4), 1)
+                            end
+                            local y = y + ymod
+                            local x1 = x - rad
+                            local x2 = x + rad
+                            local z1 = z - rad
+                            local z2 = z + rad
+                            if rad ~= -1 then
+                                for x = x1, x2 do
+                                    for z = z1, z2 do
+                                        local vi = area:index(x, y, z)
+                                        if data[vi] == c_air then
+                                            data[vi] = c_glowleaves
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            elseif chance > 30 then
+                if chance < 45 then
+                    data[vi1up] = c_glow_grasses1
+                else
+                    data[vi1up] = c_glow_grasses2
+                end
+            end
+        end
