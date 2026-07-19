@@ -117,7 +117,7 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         is_ground_content = false,
     })
 
-    core.register_node("deepcaves:decorative_" .. name .. "_bricks", {
+    core.register_node("deepcaves:decorative_" .. name .. "bricks", {
         --i used a transparent texture and it failed for some reason, so now i do this
         tiles = {texture .. "^[contrast:0:7^(deepcaves_brick_overlay.png^[opacity:50)"},
         groups = groups,
@@ -125,7 +125,7 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         is_ground_content = false,
     })
 
-    core.register_node("deepcaves:decorative_" .. name .. "_lamp", {
+    core.register_node("deepcaves:decorative_" .. name .. "lamp", {
         tiles = {texture .. "^(deepcaves_light_overlay.png)^(deepcaves_polished_overlay.png^[opacity:50)"},
         groups = groups,
         description = "Decorative " .. description .. " Lamp",

@@ -3,18 +3,28 @@ local formspec = "size[8,8]"
     .. "list[context;main;0,0;8,4;]"
     .. "list[current_player;main;0,4.25;8,4;]"
     .. "listring[]"
-    
+--only for the first time
+local function showformspec(pos, playername)
+    local strpos = pos.x .. "," .. pos.y .. "," .. pos.z
+    local formspec = "size[8,8]"
+        .. "formspec_version[4]"
+        .. "list[nodemeta:" .. strpos .. ";main;0,0;8,4;]"
+        .. "list[current_player;main;0,4.25;8,4;]"
+        .. "listring[]"
+    core.show_formspec(playername, "lootchest", formspec)
+end
 function deepcaves.register_lootchest(chestdef, loot)
+    local weightlist = {}
+    for index, item in ipairs(loot.loot) do
+        local weight = item.weight or 1
+        for i = 1, weight do
+            table.insert(weightlist, index)
+        end
+    end
+
     local function get_loot(pos)
         local max_items = loot.data.max_items or 32
         local items = #loot.loot
-        local weightlist = {}
-        for index, item in ipairs(loot.loot) do
-            local weight = item.weight
-            for i = 1, weight do
-                table.insert(weightlist, index)
-            end
-        end
         local items = {}
         local count = 0
         local rand = PcgRandom(core.hash_node_position(pos))
@@ -34,6 +44,7 @@ function deepcaves.register_lootchest(chestdef, loot)
             inv:set_size("main", 32)
             meta:set_string("formspec", formspec)
             inv:set_list("main", get_loot(pos))
+            showformspec(pos, clicker:get_player_name())
         end
     end
     chestdef.on_rightclick = onrightclick
@@ -42,16 +53,19 @@ function deepcaves.register_lootchest(chestdef, loot)
 end
 
 
-local loot = {
+local loot2 = {
     data = {max_items = 32},
     loot = {
         {name = "default:cobble", max_count = 10, weight = 1},
         {name = "default:torch", max_count = 4, weight = 2},
         {name = "default:coal_lump", weight = 3},
         {name = "default:iron_lump", weight = 1},
+        {name = "", weight = 6},
+
     }
 }
 
+local stext = deepcaves.stones[2].texture
 deepcaves.register_lootchest(
     {
         name = "deepcaves:chest",
@@ -59,6 +73,16 @@ deepcaves.register_lootchest(
         paramtype2 = "facedir",
         groups = {choppy = 2, oddly_breakable_by_hand = 2},
         sounds = default.node_sound_wood_defaults(),
+        tiles = {
+            stext .. "^(deepcaves_chest_top_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_top_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_front_overlay.png^[opacity:100)",
+
+        },
+        drop = ""
     },
-    loot
+    loot2
 )
