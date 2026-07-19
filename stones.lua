@@ -68,6 +68,7 @@ local function register_stone(texture, name, description, level, tier, max_digs,
 
                 if current_digs >= max_digs - 1 then
                     core.node_dig(pos, node, digger)
+                    core.handle_node_drops(pos, {"deepcaves:decorative_" .. name}, digger)
                     return
                 end
                 if nodes[current_digs] then node.name = nodes[current_digs] end
@@ -87,7 +88,7 @@ local function register_stone(texture, name, description, level, tier, max_digs,
 
                 if current_digs >= max_digs - 1 then
                     core.set_node(pos, {name = "air"})
-                    return {"default:cobble"}
+                    return {"deepcaves:decorative_" .. name}
                 end
 
                 if nodes[current_digs] then node.name = nodes[current_digs] end
@@ -100,6 +101,30 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         	sounds = default.node_sound_stone_defaults(),
         })
     end
+
+    core.register_node("deepcaves:decorative_" .. name, {
+        tiles = {texture},
+        groups = groups,
+        description = "Decorative " .. description,
+        is_ground_content = false,
+    })
+
+    core.register_node("deepcaves:polished_decorative_" .. name, {
+        --i used a transparent texture and it failed for some reason, so now i do this
+        tiles = {texture .. "^(deepcaves_polished_overlay.png^[opacity:50)"},
+        groups = groups,
+        description = "Polished Decorative " .. description,
+        is_ground_content = false,
+    })
+
+    core.register_node("deepcaves:decorative_" .. name .. "_bricks", {
+        --i used a transparent texture and it failed for some reason, so now i do this
+        tiles = {texture .. "^(deepcaves_brick_overlay.png^[opacity:50)"},
+        groups = groups,
+        description = "Decorative " .. description .. " Bricks",
+        is_ground_content = false,
+    })
+
     if not not_stone then
         table.insert(deepcaves.stones, {
             texture = texture,
@@ -139,5 +164,4 @@ end
 if core.get_modpath("technic") then
     register_stone("technic_granite.png^(technic_granite.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_granite", "Dense Granite", 1, 2, 10, "technic:granite", true)
     register_stone("technic_marble.png^(technic_marble.png^[opacity:100^[transformR90^[colorize:#191a45:80)", "dense_marble", "Dense Marble", 1, 2, 10, "technic:marble", true)
-
 end

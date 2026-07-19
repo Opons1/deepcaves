@@ -2,10 +2,15 @@ local mp = core.get_modpath(core.get_current_modname())
 --nodes
 core.register_node("deepcaves:stone_with_glow_grass", {
 	description = "Stone With Glow Grass",
-	tiles = {"deepcaves_glow_grass.png", deepcaves.stones[2].texture,
-		{name = deepcaves.stones[2].texture .. "^deepcaves_glow_grass_side.png",
-			tileable_vertical = false}},
-	groups = {crumbly = 3, soil = 1, spreading_dirt_type = 1},
+	tiles = {
+		"deepcaves_glow_grass.png", 
+		deepcaves.stones[2].texture,
+		{
+			name = deepcaves.stones[2].texture .. "^deepcaves_glow_grass_side.png", 
+			tileable_vertical = false
+		}
+	},
+	groups = {cracky = 1},
 	sounds = default.node_sound_dirt_defaults({
 		footstep = {name = "default_grass_footstep", gain = 0.25},
 	}),
