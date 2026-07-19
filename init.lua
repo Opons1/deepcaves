@@ -3,7 +3,10 @@ deepcaves = {}
 deepcaves.modpath = mp
 dofile(mp .. "/stones.lua")
 dofile(mp .. "/ores.lua")
+dofile(mp .. "/lootchests.lua")
+
 dofile(mp .. "/layers/layer2.lua")
+
 --techage shouldnt dig the stone either
 if techage and techage.dig_like_player then
     local old = techage.dig_like_player
