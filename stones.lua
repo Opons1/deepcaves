@@ -102,6 +102,9 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         })
     end
 
+    local groups = {cracky = level}
+    groups.level = 2
+
     core.register_node("deepcaves:decorative_" .. name, {
         tiles = {texture},
         groups = groups,
@@ -132,6 +135,12 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         is_ground_content = false,
         light_source = 14,
     })
+
+    if stairs then
+        stairs.register_stair_and_slab(name, "deepcaves:decorative_" .. name, groups, {texture}, "Decorative " .. description .. " Stair", "Decorative " .. description .. " Slab", default.node_sound_stone_defaults())
+        stairs.register_stair_and_slab(name, "deepcaves:polished_decorative_" .. name, groups, {texture .. "^(deepcaves_polished_overlay.png^[opacity:50)" }, "Polished Decorative " .. description .. " Stair", "Polished Decorative " .. description .. " Slab", default.node_sound_stone_defaults())
+        stairs.register_stair_and_slab(name, "deepcaves:decorative_" .. name .. "bricks", groups, {texture .. "^[contrast:0:7^(deepcaves_brick_overlay.png^[opacity:50)" }, "Decorative " .. description .. "Brick Stair", "Decorative " .. description .. " Brick Slab", default.node_sound_stone_defaults())
+    end
 
     if not not_stone then
         table.insert(deepcaves.stones, {

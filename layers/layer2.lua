@@ -73,8 +73,17 @@ core.register_node("deepcaves:glowtrunk", {
         "deepcaves_glow_trunk.png",
     },
     is_ground_content = false,
+    light_source = 10,
+    groups = {choppy = 3, tree = 1}
+})
+
+
+core.register_node("deepcaves:glow_wood", {
+    description = "Glowstone Wood",
+    tiles = {"deepcaves_glow_planks.png"},
+    is_ground_content = false,
     light_source = 8,
-    groups = {choppy = 3}
+    groups = {choppy = 3, wood = 1}
 })
 
 core.register_node("deepcaves:glowleaves", {
@@ -107,10 +116,47 @@ core.register_node("deepcaves:glowstone", {
     is_ground_content = false,
     light_source = 14
 })
---ores
+--crafts
+core.register_craft({
+	type = "shapeless",
+	output = "deepcaves:glow_wood 4",
+	recipe = {"deepcaves:glowtrunk"}
+})
 
+--lootchest
+local loot = {
+    data = {max_items = 32},
+    loot = {
+        {name = "default:cobble", max_count = 10, weight = 1},
+        {name = "default:torch", max_count = 4, weight = 2},
+        {name = "default:coal_lump", weight = 3},
+        {name = "default:iron_lump", weight = 1},
+        {name = "", weight = 6},
 
+    }
+}
 
+local stext = deepcaves.stones[2].texture
+deepcaves.register_lootchest(
+    {
+        name = "deepcaves:chest2",
+        description = "Loot Chest",
+        paramtype2 = "facedir",
+        groups = {choppy = 2, oddly_breakable_by_hand = 2},
+        sounds = default.node_sound_wood_defaults(),
+        tiles = {
+            stext .. "^(deepcaves_chest_top_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_top_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
+            stext .. "^(deepcaves_chest_front_overlay.png^[opacity:100)",
+
+        },
+        drop = ""
+    },
+    loot
+)
 
 --deco
 core.register_decoration({
@@ -124,11 +170,26 @@ core.register_decoration({
 })
 
 core.register_decoration({
+	deco_type = "schematic",
+    place_on = "deepcaves:stone_with_glow_grass",
+	fill_ratio = 0.00004,
+    flags = "all_floors, force_placement, place_center_x, place_center_z",
+    schematic = mp .. "/schematics/deepcaves_dungeon1.mts",
+	place_offset_y = -3,
+	replacements = {
+		["default:stone"] = "deepcaves:decorative_dense_stone2_",
+		["default:stonebrick"] = "deepcaves:decorative_dense_stone2_bricks",
+		["default:stone_block"] = "deepcaves:polished_decorative_dense_stone2_",
+		["default:chest"] = "deepcaves:chest2",
+	},
+})
+
+core.register_decoration({
     deco_type = "simple",
     place_on = "deepcaves:stone_with_glow_grass",
     fill_ratio = 0.4,
     flags = "all_floors, force_placement",
-    decoration = {"deepcaves:glow_grass" , "deepcaves:glow_grass2",}
+    decoration = {"deepcaves:glow_grass" , "deepcaves:glow_grass2",},
 })
 
 core.register_decoration({
@@ -148,13 +209,13 @@ core.register_decoration({
     place_on = "deepcaves:glowtrunk",
     sidelen = 4,
     fill_ratio = 1,
-    flags = "all_floors, force_placement, place_center_x, place_center_z",
+    flags = "all_floors, place_center_x, place_center_z",
     schematic = mp .. "/schematics/deepcaves_glowtree1.mts"
 })
 core.register_decoration({
     deco_type = "schematic",
     place_on = "deepcaves:glowtrunk",
     fill_ratio = 10,
-    flags = "all_floors, force_placement, place_center_x, place_center_z",
+    flags = "all_floors, place_center_x, place_center_z",
     schematic = mp .. "/schematics/deepcaves_glowtree2.mts"
 })

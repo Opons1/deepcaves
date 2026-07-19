@@ -53,36 +53,4 @@ function deepcaves.register_lootchest(chestdef, loot)
 end
 
 
-local loot2 = {
-    data = {max_items = 32},
-    loot = {
-        {name = "default:cobble", max_count = 10, weight = 1},
-        {name = "default:torch", max_count = 4, weight = 2},
-        {name = "default:coal_lump", weight = 3},
-        {name = "default:iron_lump", weight = 1},
-        {name = "", weight = 6},
 
-    }
-}
-
-local stext = deepcaves.stones[2].texture
-deepcaves.register_lootchest(
-    {
-        name = "deepcaves:chest",
-        description = "Loot Chest",
-        paramtype2 = "facedir",
-        groups = {choppy = 2, oddly_breakable_by_hand = 2},
-        sounds = default.node_sound_wood_defaults(),
-        tiles = {
-            stext .. "^(deepcaves_chest_top_overlay.png^[opacity:100)",
-            stext .. "^(deepcaves_chest_top_overlay.png^[opacity:100)",
-            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
-            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
-            stext .. "^(deepcaves_chest_side_overlay.png^[opacity:100)",
-            stext .. "^(deepcaves_chest_front_overlay.png^[opacity:100)",
-
-        },
-        drop = ""
-    },
-    loot2
-)
