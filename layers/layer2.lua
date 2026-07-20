@@ -116,6 +116,70 @@ core.register_node("deepcaves:glowstone", {
     is_ground_content = false,
     light_source = 14
 })
+
+core.register_node("deepcaves:glow_sapling", {
+	description = "Glow Tree Sapling",
+	drawtype = "plantlike",
+	tiles = {"deepcaves_glow_sapling.png"},
+	inventory_image = "deepcaves_glow_sapling.png",
+	wield_image = "deepcaves_glow_sapling.png",
+	paramtype = "light",
+	sunlight_propagates = true,
+	walkable = false,
+	on_timer = function(pos)
+		default.grow_sapling(pos)
+	end,
+	selection_box = {
+		type = "fixed",
+		fixed = {-3 / 16, -0.5, -3 / 16, 3 / 16, 0.5, 3 / 16}
+	},
+	groups = {snappy = 2, dig_immediate = 3, flammable = 3, attached_node = 1, sapling = 1},
+	sounds = default.node_sound_leaves_defaults(),
+
+	on_construct = function(pos)
+		core.get_node_timer(pos):start(math.random(300, 700))
+	end,
+})
+
+default.register_sapling_growth("deepcaves:glow_sapling", {
+	can_grow = function(pos)
+		pos.y = pos.y - 1
+		local below = core.get_node(pos)
+		pos.y = pos.y + 1
+		if not below then return false end
+		if not below.name then return false end
+		if below.name ~= "deepcaves:stone_with_glow_grass" then return false end
+		return true
+	end,
+	on_grow_failed = function(pos)
+		core.get_node_timer(pos):start(100)
+	end,
+	grow = function(pos)
+		local height = math.random(4, 10)
+		local oldy = pos.y
+		core.set_node(pos, {name = "deepcaves:glowtrunk"})
+		for i = 2, height do
+			pos.y = pos.y + 1
+			if core.get_node(pos) and core.get_node(pos).name == "air" then
+				core.set_node(pos, {name = "deepcaves:glowtrunk"})
+			end
+		end
+		pos.y = pos.y + 1
+		local col = math.random(1, 2)
+		local schem
+		if col == 1 then
+			schem = mp .. "/schematics/deepcaves_glowtree1.mts"
+		else
+			schem = mp .. "/schematics/deepcaves_glowtree2.mts"
+		end
+
+		core.place_schematic(pos, schem, "random", {},  false, {
+			place_center_x = true,
+			place_center_z = true,
+		})
+		pos.y = oldy
+	end
+})
 --crafts
 core.register_craft({
 	type = "shapeless",

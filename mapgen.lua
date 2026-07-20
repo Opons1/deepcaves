@@ -157,7 +157,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
 
     local noise_surface = map_surface:get_2d_map_flat({x = x0, y = z0, z = key}, buffer_surface)
     local noise_ceiling = map_ceiling:get_2d_map_flat({x = x0, y = z0, z = key}, buffer_ceiling)
-
+    local light_data = vm:get_light_data() 
     local n_idx = 1
     for z = z0, z1 do
         for x = x0, x1 do
@@ -182,6 +182,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
                         data[vi] = actions[data[vi]](lev) or actions[data[vi]]
                     end
                 end
+                light_data[vi] = 255
             end
         end
     end
@@ -202,9 +203,8 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
     end
 
 
-
+    --vm:set_light_data(light_data)
     --now the fun part
     vm:set_data(data)
     core.generate_decorations(vm, minp, maxp)
-	vm:calc_lighting()
 end)
