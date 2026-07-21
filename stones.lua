@@ -170,6 +170,7 @@ local names = {
     [2] = "Glowing Dense Stone"
 }
 local textures = {}
+
 local extdata = {
     [2] = {
         light_source = 1,
