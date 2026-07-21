@@ -1,5 +1,5 @@
 deepcaves.stones = {}
-local function register_stone(texture, name, description, level, tier, max_digs, drop, not_stone)
+local function register_stone(texture, name, description, level, tier, max_digs, drop, not_stone, extdata)
     --total stone types
     local variants
     --calculate number needed to reigister
@@ -57,49 +57,47 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         if i ~= 1 then
             groups.not_in_creative_inventory = 1
         end
+        local data = extdata or {}
+        data.description = description
+        data.groups = groups
+        data.tiles = {texture .. overlays[i]}
+        data.node_dig_prediction = fullname
+        --the dig logic
+        data.on_dig = function(pos, node, digger)
+            local current_digs = node.param2
 
-        core.register_node(fullname, {
-            description = description,
-            groups = groups,
-            tiles = {texture .. overlays[i]},
-            node_dig_prediction = fullname,
-            on_dig = function(pos, node, digger)
-                local current_digs = node.param2
+            if current_digs >= max_digs - 1 then
+                core.node_dig(pos, node, digger)
+                core.handle_node_drops(pos, {"deepcaves:decorative_" .. name}, digger)
+                return
+            end
+            if nodes[current_digs] then node.name = nodes[current_digs] end
+            local dug = core.node_dig(pos, node, digger)
 
-                if current_digs >= max_digs - 1 then
-                    core.node_dig(pos, node, digger)
-                    core.handle_node_drops(pos, {"deepcaves:decorative_" .. name}, digger)
-                    return
-                end
-                if nodes[current_digs] then node.name = nodes[current_digs] end
-                local dug = core.node_dig(pos, node, digger)
-
-                if dug then
-                    node.param2 = current_digs + 1
-                    core.swap_node(pos, node)
-                end
-            end,
-
-            drop = "default:cobble" or drop,
-
-            on_blast = function(pos)
-                local node = core.get_node(pos)
-                local current_digs = node.param2
-
-                if current_digs >= max_digs - 1 then
-                    core.set_node(pos, {name = "air"})
-                    return {"deepcaves:decorative_" .. name}
-                end
-
-                if nodes[current_digs] then node.name = nodes[current_digs] end
+            if dug then
                 node.param2 = current_digs + 1
                 core.swap_node(pos, node)
-                return {"default:cobble"}
-            end,
-            --to make undiggable by technic quarry
-            _mcl_hardness = -1,
-        	sounds = default.node_sound_stone_defaults(),
-        })
+            end
+        end
+
+        data.on_blast = function(pos)
+            local node = core.get_node(pos)
+            local current_digs = node.param2
+
+            if current_digs >= max_digs - 1 then
+                core.set_node(pos, {name = "air"})
+                return {"deepcaves:decorative_" .. name}
+            end
+
+            if nodes[current_digs] then node.name = nodes[current_digs] end
+            node.param2 = current_digs + 1
+            core.swap_node(pos, node)
+            return {"default:cobble"}
+        end
+        data.drop = "default:cobble" or drop
+        data._mcl_hardness = -1
+        if not data.sounds then data.sounds = default.node_sound_stone_defaults() end
+        core.register_node(fullname, data)
     end
 
     local groups = {cracky = level}
@@ -149,6 +147,7 @@ local function register_stone(texture, name, description, level, tier, max_digs,
             description = description,
             level = level,
             tier = tier,
+            extdata = extdata,
         })
     end
 end
@@ -166,6 +165,18 @@ end
 local texture = "deepcaves_densestone1.png"
 local texture_overlay = "^(deepcaves_densestone1.png^[opacity:150^[transformR90)"
 local color_layer = "^(deepcaves_densestone1.png^[fill:16x16:0,0:#888888"
+local names = {
+    [1] = "Dense Stone",
+    [2] = "Glowing Dense Stone"
+}
+local textures = {
+    [2] = "deepcaves_densestone2.png"
+}
+local extdata = {
+    [2] = {
+        light_source = 1,
+    }
+}
 --1 to 26
 for i = 1, 26 do
     color_layer = color_layer .. "^[colorize:#000000:30"    
@@ -173,7 +184,7 @@ for i = 1, 26 do
     local utext = texture .. texture_overlay .. color_layer .. "^[opacity:" .. (140 + i * 2) .. ")"    
     local drops = math.floor(i/2) + 1
     local digs = i * 2 + 10
-    register_stone(utext, "dense_stone" .. i .. "_", "Dense Stone " .. i, 1, drops, digs, "default:cobble")
+    register_stone(textures[i] or utext, "dense_stone" .. i .. "_", names[i] or "Dense Stone " .. i, 1, drops, digs, "default:cobble", false, extdata[i] or nil)
 end
 
 

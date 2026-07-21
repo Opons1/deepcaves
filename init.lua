@@ -6,6 +6,7 @@ dofile(mp .. "/ores.lua")
 dofile(mp .. "/lootchests.lua")
 
 dofile(mp .. "/layers/layer2.lua")
+dofile(mp .. "/layers/layer3.lua")
 
 --techage shouldnt dig the stone either
 if techage and techage.dig_like_player then
@@ -21,7 +22,7 @@ end
 
 core.register_mapgen_script(mp .. "/mapgen.lua")
 
-deepcaves.modpath = nil
+deepcaves = nil
 
 --notes
 --underworlds ends at -24755
