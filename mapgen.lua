@@ -144,8 +144,8 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
     local emin, emax = vm:get_emerged_area()
     local area = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
 
-    local x0, y0, z0 = emin.x, minp.y, emin.z
-    local x1, y1, z1 = emax.x, maxp.y, emax.z
+    local x0, y0, z0 = emin.x, emin.y, emin.z
+    local x1, y1, z1 = emax.x, emax.y, emax.z
 
     local side_x = x1 - x0 + 1
     local side_z = z1 - z0 + 1
@@ -157,7 +157,6 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
 
     local noise_surface = map_surface:get_2d_map_flat({x = x0, y = z0, z = key}, buffer_surface)
     local noise_ceiling = map_ceiling:get_2d_map_flat({x = x0, y = z0, z = key}, buffer_ceiling)
-    local light_data = vm:get_light_data() 
     local n_idx = 1
     for z = z0, z1 do
         for x = x0, x1 do
@@ -182,7 +181,6 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
                         data[vi] = actions[data[vi]](lev) or actions[data[vi]]
                     end
                 end
-                light_data[vi] = 255
             end
         end
     end
@@ -207,4 +205,6 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
     --now the fun part
     vm:set_data(data)
     core.generate_decorations(vm, minp, maxp)
+    vm:calc_lighting()
+
 end)

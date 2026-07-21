@@ -48,7 +48,7 @@ function deepcaves.register_lootchest(chestdef, loot)
         end
     end
     chestdef.on_rightclick = onrightclick
-
+    chestdef.is_ground_content = false
     core.register_node(chestdef.name, chestdef)
 end
 

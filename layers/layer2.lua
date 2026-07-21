@@ -29,14 +29,15 @@ core.register_node("deepcaves:glow_grass", {
 	sunlight_propagates = true,
 	walkable = false,
 	buildable_to = true,
-	groups = {snappy = 3, flammable = 3, flora = 1, attached_node = 1,
-		grass = 1},
+	groups = {snappy = 3, flammable = 3, flora = 1, attached_node = 1, grass = 1},
 	sounds = default.node_sound_leaves_defaults(),
 	selection_box = {
 		type = "fixed",
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, -0.25, 6 / 16},
 	},
     is_ground_content = false,
+	light_source = 6,
+
 })
 
 core.register_node("deepcaves:glow_grass2", {
@@ -57,7 +58,7 @@ core.register_node("deepcaves:glow_grass2", {
 		type = "fixed",
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, -0.25, 6 / 16},
 	},
-    light_source = 8,
+    light_source = 6,
     is_ground_content = false,
 
 })
@@ -86,16 +87,41 @@ core.register_node("deepcaves:glow_wood", {
     groups = {choppy = 3, wood = 1}
 })
 
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				items = {"deepcaves:glow_Sapling"},
+				rarity = 30,
+			},
+			{
+				items = {"deepcaves:glow_leaves"},
+			}
+		}
+	},
+
 core.register_node("deepcaves:glowleaves", {
 	description = "Glow Leaves",
 	drawtype = "allfaces",
 	tiles = {"deepcaves_glow_leaves.png"},
 	waving = 1,
-    light_source = 8,
+	light_source = 8,
 	paramtype = "light",
 	is_ground_content = false,
-	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
+	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1, leafdecay = 1},
 	sounds = default.node_sound_leaves_defaults(),
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				items = {"deepcaves:glow_sapling"},
+				rarity = 30,
+			},
+			{
+				items = {"deepcaves:glowleaves"},
+			}
+		}
+	},
 })
 
 core.register_node("deepcaves:glowleaves2", {
@@ -103,12 +129,25 @@ core.register_node("deepcaves:glowleaves2", {
 	drawtype = "allfaces",
 	tiles = {"deepcaves_glow_leaves_2.png"},
 	waving = 1,
-    light_source = 8,
+	light_source = 8,
 	paramtype = "light",
 	is_ground_content = false,
-	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1},
+	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1, leafdecay = 1},
 	sounds = default.node_sound_leaves_defaults(),
+	drop = {
+		max_items = 1,
+		items = {
+			{
+				items = {"deepcaves:glow_sapling"},
+				rarity = 20,
+			},
+			{
+				items = {"deepcaves:glowleaves2"},
+			}
+		}
+	},
 })
+
 
 core.register_node("deepcaves:glowstone", {
     description = "Floating Glowstone",
@@ -133,11 +172,11 @@ core.register_node("deepcaves:glow_sapling", {
 		type = "fixed",
 		fixed = {-3 / 16, -0.5, -3 / 16, 3 / 16, 0.5, 3 / 16}
 	},
-	groups = {snappy = 2, dig_immediate = 3, flammable = 3, attached_node = 1, sapling = 1},
+	groups = {snappy = 2, dig_immediate = 3, flammable = 3, attached_node = 1, sapling = 1, leafdecay_drop = 1},
 	sounds = default.node_sound_leaves_defaults(),
 
 	on_construct = function(pos)
-		core.get_node_timer(pos):start(math.random(300, 700))
+		core.get_node_timer(pos):start(math.random(3, 7))
 	end,
 })
 
@@ -179,6 +218,14 @@ default.register_sapling_growth("deepcaves:glow_sapling", {
 		})
 		pos.y = oldy
 	end
+})
+
+--leafdecay
+
+default.register_leafdecay({
+	trunks = {"deepcaves:glowtrunk"},
+	leaves = {"deepcaves:glowleaves", "deepcaves:glowleaves2"},
+	radius = 2,
 })
 --crafts
 core.register_craft({
@@ -260,6 +307,7 @@ core.register_decoration({
     deco_type = "simple",
     place_on = "deepcaves:stone_with_glow_grass",
     fill_ratio = 0.07,
+	sidelen = 4,
     flags = "all_floors, force_placement",
     decoration = "deepcaves:glowtrunk",
     height = 4,
@@ -271,7 +319,6 @@ core.register_decoration({
 core.register_decoration({
     deco_type = "schematic",
     place_on = "deepcaves:glowtrunk",
-    sidelen = 4,
     fill_ratio = 1,
     flags = "all_floors, place_center_x, place_center_z",
     schematic = mp .. "/schematics/deepcaves_glowtree1.mts"

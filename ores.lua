@@ -11,7 +11,7 @@ local function register_ore(data)
             tiles = {stone.texture .. "^" .. data.tiles},
             groups = groups,
             drop = data.drop .. " " .. stone.tier,
-            light_source = data.light_source or 0
+            light_source = data.light_source or stone.extdata and stone.extdata.light_source or 0
         })
         local orecid = core.get_content_id("deepcaves:" .. stone.name .. data.name)
         table.insert(ores, orecid)
