@@ -143,6 +143,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
     
     local emin, emax = vm:get_emerged_area()
     local area = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
+    local light_data = vm:get_light_data()
 
     local x0, y0, z0 = emin.x, emin.y, emin.z
     local x1, y1, z1 = emax.x, emax.y, emax.z
@@ -181,6 +182,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
                         data[vi] = actions[data[vi]](lev) or actions[data[vi]]
                     end
                 end
+                light_data[vi] = 255
             end
         end
     end
@@ -201,7 +203,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
     end
 
 
-    --vm:set_light_data(light_data)
+    vm:set_light_data(light_data)
     --now the fun part
     vm:set_data(data)
     core.generate_decorations(vm, minp, maxp)
