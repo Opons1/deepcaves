@@ -55,12 +55,15 @@ core.register_decoration({
 core.register_decoration({
     deco_type = "simple",
     place_on = "deepcaves:dense_sand",
+    sidelen = 1,
     noise_params = {
         offset = 0,           
-        scale = 80,                 
+        scale = 100000,                 
         spread = {x=250, y=250, z=250},
         seed = 12345,
-        octaves = 1,
+        octaves = 4,
+        persistence = 0.9,
+        lanucarity = 1,
     },
     flags = "all_floors, force_placement",
     decoration = "deepcaves:dense_sand_purple",

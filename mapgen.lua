@@ -182,6 +182,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
                         data[vi] = actions[data[vi]](lev) or actions[data[vi]]
                     end
                 end
+                --temp for testing
                 light_data[vi] = 255
             end
         end
