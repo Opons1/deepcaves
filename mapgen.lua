@@ -204,7 +204,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
     end
 
 
-    vm:set_light_data(light_data)
+    --vm:set_light_data(light_data)
     --now the fun part
     vm:set_data(data)
     core.generate_decorations(vm, minp, maxp)

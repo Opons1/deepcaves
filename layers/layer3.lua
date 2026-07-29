@@ -59,14 +59,27 @@ core.register_decoration({
     noise_params = {
         offset = 0,           
         scale = 100000,                 
-        spread = {x=250, y=250, z=250},
+        spread = {x=250, y=250},
         seed = 12345,
         octaves = 4,
-        persistence = 0.9,
-        lanucarity = 1,
+        persistence = 0.5,
+        lacunarity = 2.0,
     },
     flags = "all_floors, force_placement",
     decoration = "deepcaves:dense_sand_purple",
     place_offset_y = -5,
     height = 5,
+})
+
+core.register_decoration({
+    deco_type = "simple",
+    place_on = "deepcaves:dense_sand_purple",
+    fill_ratio = 0.07,
+	sidelen = 4,
+    flags = "all_floors, force_placement",
+    decoration = "deepcaves:purple_cactus",
+    height = 4,
+    height_max = 10,
+    spawn_by = "air",
+    num_spawn_by = 4
 })
