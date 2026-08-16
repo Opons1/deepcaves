@@ -148,6 +148,7 @@ local function register_stone(texture, name, description, level, tier, max_digs,
             level = level,
             tier = tier,
             extdata = extdata,
+            nodes = {"deepcaves:" .. name},
         })
     end
 end

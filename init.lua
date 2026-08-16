@@ -1,9 +1,12 @@
 local mp = core.get_modpath(core.get_current_modname())
 deepcaves = {}
 deepcaves.modpath = mp
+dofile(mp .. "/helpers.lua")
+dofile(mp .. "/itemlist.lua")
 dofile(mp .. "/stones.lua")
 dofile(mp .. "/ores.lua")
 dofile(mp .. "/lootchests.lua")
+dofile(mp .. "/effects.lua")
 
 dofile(mp .. "/layers/layer2.lua")
 dofile(mp .. "/layers/layer3.lua")

@@ -14,7 +14,7 @@ core.register_node("deepcaves:stone_with_glow_grass", {
 	sounds = default.node_sound_dirt_defaults({
 		footstep = {name = "default_grass_footstep", gain = 0.25},
 	}),
-    light_source = 6,
+    paramtype = "light", light_source = 6,
     is_ground_content = false
 })
 
@@ -36,7 +36,7 @@ core.register_node("deepcaves:glow_grass", {
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, -0.25, 6 / 16},
 	},
     is_ground_content = false,
-	light_source = 6,
+	paramtype = "light", light_source = 6,
 
 })
 
@@ -58,7 +58,7 @@ core.register_node("deepcaves:glow_grass2", {
 		type = "fixed",
 		fixed = {-6 / 16, -0.5, -6 / 16, 6 / 16, -0.25, 6 / 16},
 	},
-    light_source = 6,
+    paramtype = "light", light_source = 6,
     is_ground_content = false,
 
 })
@@ -74,7 +74,7 @@ core.register_node("deepcaves:glowtrunk", {
         "deepcaves_glow_trunk.png",
     },
     is_ground_content = false,
-    light_source = 10,
+    paramtype = "light", light_source = 10,
     groups = {choppy = 3, tree = 1}
 })
 
@@ -83,7 +83,7 @@ core.register_node("deepcaves:glow_wood", {
     description = "Glowstone Wood",
     tiles = {"deepcaves_glow_planks.png"},
     is_ground_content = false,
-    light_source = 8,
+    paramtype = "light", light_source = 8,
     groups = {choppy = 3, wood = 1}
 })
 
@@ -105,7 +105,7 @@ core.register_node("deepcaves:glowleaves", {
 	drawtype = "allfaces",
 	tiles = {"deepcaves_glow_leaves.png"},
 	waving = 1,
-	light_source = 8,
+	paramtype = "light", light_source = 8,
 	paramtype = "light",
 	is_ground_content = false,
 	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1, leafdecay = 1},
@@ -129,7 +129,7 @@ core.register_node("deepcaves:glowleaves2", {
 	drawtype = "allfaces",
 	tiles = {"deepcaves_glow_leaves_2.png"},
 	waving = 1,
-	light_source = 8,
+	paramtype = "light", light_source = 8,
 	paramtype = "light",
 	is_ground_content = false,
 	groups = {snappy = 3, leafdecay = 3, flammable = 2, leaves = 1, leafdecay = 1},
@@ -153,7 +153,7 @@ core.register_node("deepcaves:glowstone", {
     description = "Floating Glowstone",
     tiles = {"deepcaves_glow.png"},
     is_ground_content = false,
-    light_source = 14
+    paramtype = "light", light_source = 14
 })
 
 core.register_node("deepcaves:glow_sapling", {

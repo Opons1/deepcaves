@@ -1,20 +1,24 @@
 deepcaves.ores = {}
 local function register_ore(data)
     local ores = {}
-    for _, stone in ipairs(deepcaves.stones) do
+    for i, stone in ipairs(deepcaves.stones) do
         local groups = table.copy(data.groups) or {}
         if not groups.cracky then
             groups.cracky = stone.level
         end
-        core.register_node("deepcaves:" .. stone.name .. data.name, {
+        groups.not_in_creative_inventory = 1
+        local name = "deepcaves:" .. stone.name .. data.name
+        core.register_node(name, {
             description = stone.description .. data.description,
             tiles = {stone.texture .. "^" .. data.tiles},
             groups = groups,
             drop = data.drop .. " " .. stone.tier,
             light_source = data.light_source or stone.extdata and stone.extdata.light_source or 0
         })
-        local orecid = core.get_content_id("deepcaves:" .. stone.name .. data.name)
+
+        local orecid = core.get_content_id(name)
         table.insert(ores, orecid)
+        table.insert(deepcaves.stones[i].nodes, name)
     end
     deepcaves.ores[core.get_content_id(data.ore)] = ores 
 end
