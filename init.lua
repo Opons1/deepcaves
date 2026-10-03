@@ -1,5 +1,6 @@
 local mp = core.get_modpath(core.get_current_modname())
 deepcaves = {}
+deepcaves.version = 0.1
 deepcaves.modpath = mp
 dofile(mp .. "/helpers.lua")
 dofile(mp .. "/itemlist.lua")
@@ -25,7 +26,10 @@ end
 
 core.register_mapgen_script(mp .. "/mapgen.lua")
 
-deepcaves = nil
+--wipe mapgen to make room for caves
+if core.settings:get_bool("deepcaves_wipe_previous_mapgen", false) then
+    dofile(mp .. "/regenerate.lua")
+end
 
 --notes
 --underworlds ends at -24755

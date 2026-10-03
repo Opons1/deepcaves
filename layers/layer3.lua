@@ -122,7 +122,14 @@ core.register_craft{
     }
 }
 
-
+core.register_craft({
+    output = "deepcaves:poison_dagger",
+    recipe = {
+        {"deepcaves:poison_extract"},
+        {"default:diamond"},
+        {"group:stick"},
+    }
+})
 --deco
 
 core.register_decoration({

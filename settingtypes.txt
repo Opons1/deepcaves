@@ -1,0 +1,2 @@
+#    Regenerate mapblocks in the region that would be affected by this mod
+deepcaves_wipe_previous_mapgen (Regenerate mapblocks) bool false

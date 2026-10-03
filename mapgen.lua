@@ -183,7 +183,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
                     end
                 end
                 --temp for testing
-                light_data[vi] = 255
+                --light_data[vi] = 255
             end
         end
     end
