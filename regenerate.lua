@@ -10,7 +10,7 @@ local is_loading
 --mark mapblocks generated after this 
 core.register_lbm({
     label = "regenerate old caves",
-    name = "deepcaves:regenerate_" .. deepcaves.version,
+    name = "deepcaves:regenerate_" .. 5,
     bulk_action = function(pos_list)
         for _, pos in ipairs(pos_list) do
             if pos.y < -24755 then
