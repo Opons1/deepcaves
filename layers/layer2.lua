@@ -323,7 +323,6 @@ core.register_decoration({
     flags = "all_floors, place_center_x, place_center_z",
     schematic = mp .. "/schematics/deepcaves_glowtree1.mts"
 })
---[[
 core.register_decoration({
     deco_type = "schematic",
     place_on = "deepcaves:glowtrunk",
@@ -331,4 +330,3 @@ core.register_decoration({
     flags = "all_floors, place_center_x, place_center_z",
     schematic = mp .. "/schematics/deepcaves_glowtree2.mts"
 })
-]]
