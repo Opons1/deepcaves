@@ -118,12 +118,29 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         is_ground_content = false,
     })
 
+    core.register_craft({
+        output = "deepcaves:polished_decorative_" .. name,
+        recipe = {
+            {"deepcaves:decorative_" .. name, "deepcaves:decorative_" .. name, "deepcaves:decorative_" .. name},
+            {"deepcaves:decorative_" .. name, "deepcaves:decorative_" .. name, "deepcaves:decorative_" .. name},
+            {"deepcaves:decorative_" .. name, "deepcaves:decorative_" .. name, "deepcaves:decorative_" .. name}
+        }
+    })
+
     core.register_node("deepcaves:decorative_" .. name .. "bricks", {
         --i used a transparent texture and it failed for some reason, so now i do this
         tiles = {texture .. "^[contrast:0:7^(deepcaves_brick_overlay.png^[opacity:50)"},
         groups = groups,
         description = "Decorative " .. description .. " Bricks",
         is_ground_content = false,
+    })
+
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "bricks",
+        recipe = {
+            {"deepcaves:decorative_" .. name, "deepcaves:decorative_" .. name},
+            {"deepcaves:decorative_" .. name, "deepcaves:decorative_" .. name},
+        }
     })
 
     core.register_node("deepcaves:decorative_" .. name .. "carved", {
@@ -134,6 +151,12 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         is_ground_content = false,
     })
 
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "carved",
+        recipe = {
+            {"deepcaves:decorative_" .. name}
+        }
+    })
 
     core.register_node("deepcaves:decorative_" .. name .. "carved_2", {
         --i used a transparent texture and it failed for some reason, so now i do this
@@ -141,6 +164,13 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         groups = groups,
         description = "Decorative Carved " .. description .. " 2",
         is_ground_content = false,
+    })
+
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "carved_2",
+        recipe = {
+            {"deepcaves:decorative_" .. name .. "carved"}
+        }
     })
 
     core.register_node("deepcaves:decorative_" .. name .. "lamp", {
@@ -151,12 +181,74 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         light_source = 14,
     })
 
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "lamp",
+        recipe = {
+            {"", "deepcaves:glow_dust_1", ""},
+            {"deepcaves:glow_dust_1", "deepcaves:decorative_" .. name, "deepcaves:glow_dust_1"},
+            {"", "deepcaves:glow_dust_1", ""},
+        }
+    })
+
     core.register_node("deepcaves:decorative_" .. name .. "lamp_2", {
         tiles = {texture .. "^(deepcaves_light_overlay_2.png)^(deepcaves_polished_overlay.png^[opacity:50)"},
         groups = groups,
         description = "Decorative " .. description .. " Lamp 2",
         is_ground_content = false,
         light_source = 14,
+    })
+
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "lamp_2",
+        recipe = {
+            {"deepcaves:decorative_" .. name .. "lamp"},
+        }
+    })
+
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "lamp",
+        recipe = {
+            {"deepcaves:decorative_" .. name .. "lamp_2"},
+        }
+    })
+
+    core.register_node("deepcaves:decorative_" .. name .. "inverted_lamp", {
+        tiles = {texture .. "^(deepcaves_inverted_light_overlay.png)^(deepcaves_polished_overlay.png^[opacity:50)"},
+        groups = groups,
+        description = "Inverted Decorative " .. description .. " Lamp",
+        is_ground_content = false,
+        light_source = 14,
+    })
+
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "inverted_lamp",
+        recipe = {
+            {"", "deepcaves:glow_dust_2", ""},
+            {"deepcaves:glow_dust_2", "deepcaves:decorative_" .. name, "deepcaves:glow_dust_2"},
+            {"", "deepcaves:glow_dust_2", ""},
+        }
+    })
+
+    core.register_node("deepcaves:decorative_" .. name .. "inverted_lamp_2", {
+        tiles = {texture .. "^(deepcaves_inverted_light_overlay_2.png)^(deepcaves_polished_overlay.png^[opacity:50)"},
+        groups = groups,
+        description = "Decorative " .. description .. " Lamp 2",
+        is_ground_content = false,
+        light_source = 14,
+    })
+
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "inverted_lamp_2",
+        recipe = {
+            {"deepcaves:decorative_" .. name .. "inverted_lamp"},
+        }
+    })
+
+    core.register_craft({
+        output = "deepcaves:decorative_" .. name .. "inverted_lamp",
+        recipe = {
+            {"deepcaves:decorative_" .. name .. "inverted_lamp_2"},
+        }
     })
 
     if stairs then

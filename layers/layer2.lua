@@ -1,4 +1,6 @@
 local mp = core.get_modpath(core.get_current_modname())
+local item = deepcaves.itemlist
+
 --nodes
 core.register_node("deepcaves:stone_with_glow_grass", {
 	description = "Stone With Glow Grass",
@@ -219,7 +221,16 @@ default.register_sapling_growth("deepcaves:glow_sapling", {
 		pos.y = oldy
 	end
 })
+--craftitems
+core.register_craftitem("deepcaves:glow_dust_1", {
+	inventory_image = "deepcaves_glow_dust_1.png",
+	description = "Glow Dust"
+})
 
+core.register_craftitem("deepcaves:glow_dust_2", {
+	inventory_image = "deepcaves_glow_dust_2.png",
+	description = "Inverted Glow Dust"
+})
 --leafdecay
 
 default.register_leafdecay({
@@ -233,6 +244,30 @@ core.register_craft({
 	output = "deepcaves:glow_wood 4",
 	recipe = {"deepcaves:glowtrunk"}
 })
+
+core.register_craft{
+    output = "deepcaves:glow_dust_1",
+    recipe = {
+        {"deepcaves:glowleaves", "deepcaves:glowleaves", "deepcaves:glowleaves"},
+        {"deepcaves:glowleaves", "deepcaves:glowleaves", "deepcaves:glowleaves"},
+        {"", item.mortar_pestle, ""}
+    },
+    replacements = {
+        {item.mortar_pestle, item.mortar_pestle}
+    }
+}
+
+core.register_craft{
+    output = "deepcaves:glow_dust_2",
+    recipe = {
+        {"deepcaves:glowleaves2", "deepcaves:glowleaves2", "deepcaves:glowleaves2"},
+        {"deepcaves:glowleaves2", "deepcaves:glowleaves2", "deepcaves:glowleaves2"},
+        {"", item.mortar_pestle, ""}
+    },
+    replacements = {
+        {item.mortar_pestle, item.mortar_pestle}
+    }
+}
 
 --lootchest
 local loot = {
