@@ -30,10 +30,6 @@ playereffects.register_effect_type(
     1
 )
 
-core.register_on_joinplayer(function(player)
-    playereffects.apply_effect_type("deepcaves:poison", 3, player)
-end)
-
 if announce_deaths then
     announce_deaths.register_custom_reason_death("deepcaves:poison", " was killed by poison.")
 end
