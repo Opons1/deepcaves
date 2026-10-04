@@ -27,13 +27,15 @@ core.register_lbm({
 })
 --marks newly generated mapblocks as ok
 core.register_on_generated(function(minp, maxp)
-    for x = minp.x, maxp.x, 16 do
-        for y = minp.y, maxp.y, 16 do
-            for z = minp.y, maxp.y, 16 do
-                local id = get_mapblock_id({x = x, y = y, z = z})
-                storage:set_int(id, 1)
-                --core.chat_send_all("generated" .. id)
-                is_loading = true
+    if minp.y < maxy + 300 then 
+        for x = minp.x, maxp.x, 16 do
+            for y = minp.y, maxp.y, 16 do
+                for z = minp.y, maxp.y, 16 do
+                    local id = get_mapblock_id({x = x, y = y, z = z})
+                    storage:set_int(id, 1)
+                    --core.chat_send_all("generated" .. id)
+                    is_loading = true
+                end
             end
         end
     end

@@ -15,10 +15,13 @@ local function register_ore(data)
             drop = data.drop .. " " .. stone.tier,
             light_source = data.light_source or stone.extdata and stone.extdata.light_source or 0
         })
-
         local orecid = core.get_content_id(name)
         table.insert(ores, orecid)
         table.insert(deepcaves.stones[i].nodes, name)
+
+        if deepcaves.config.has_opw_terumet then 
+            terumet.register_ore_saw_node(name)
+        end
     end
     deepcaves.ores[core.get_content_id(data.ore)] = ores 
 end
