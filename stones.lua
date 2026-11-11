@@ -57,7 +57,7 @@ local function register_stone(texture, name, description, level, tier, max_digs,
         if i ~= 1 then
             groups.not_in_creative_inventory = 1
         end
-        local data = extdata or {}
+        local data = extdata and table.copy(extdata) or {}
         data.description = description
         data.groups = groups
         data.tiles = {texture .. overlays[i]}

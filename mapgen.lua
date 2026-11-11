@@ -151,7 +151,7 @@ core.register_on_generated(function(vm, minp, maxp, blockseed)
     local side_x = x1 - x0 + 1
     local side_z = z1 - z0 + 1
 
-    local map_size = {x = side_x, y = side_z}
+    local map_size = {x = side_x, y = side_z, z = 1}
 
     map_surface = map_surface or core.get_perlin_map(noise_params1, map_size)
     map_ceiling = map_ceiling or core.get_perlin_map(noise_params2, map_size)
